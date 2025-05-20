@@ -12,6 +12,7 @@
     <button id="add-row">Add Row</button>
     <button id="add-column">Add Column</button>
     <button id="color-picker">Change Cell Color</button>
+    <button id="export-to-excel">Export to Excel</button>
   </div>
 
   <div class="spreadsheet-container">
@@ -27,6 +28,17 @@
     <button id="cancel-color">Cancel</button>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
   <script src="spreadsheet.js"></script>
+
+  <script>
+  // Function to export table data to Excel
+  document.getElementById("export-to-excel").addEventListener("click", function () {
+    const table = document.getElementById("spreadsheet");
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" }); // Convert HTML table to workbook
+    XLSX.writeFile(wb, "spreadsheet.xlsx"); // Download as .xlsx file
+  });
+</script>
 </body>
 </html>
