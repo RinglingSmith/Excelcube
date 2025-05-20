@@ -1,5 +1,5 @@
-let rows = 10;
-let cols = 10;
+let rows = 7;
+let cols = 5;
 let selectedCell = null;
 
 // Create the initial grid
