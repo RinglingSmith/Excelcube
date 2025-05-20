@@ -1,55 +1,97 @@
+/* Main Body Styling */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Courier New', Courier, monospace; /* Vintage font style */
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: #e1e1e1; /* Soft gray background like older Excel */
   flex-direction: column;
 }
 
+/* Controls (Buttons and controls at the top) */
 .controls {
   margin-bottom: 10px;
+  padding: 10px;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 8px 16px;
   margin: 5px;
   cursor: pointer;
+  background-color: #b8b8b8; /* Light gray background for buttons */
+  color: black;
+  border: 1px solid #777; /* Gray border */
+  border-radius: 3px; /* Square edges to look retro */
+  font-family: 'Courier New', Courier, monospace; /* Same font as Excel */
 }
 
+button:hover {
+  background-color: #9f9f9f; /* Darker gray for hover */
+}
+
+/* Container for the spreadsheet table */
 .spreadsheet-container {
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Light border for the entire container */
   padding: 20px;
   background-color: white;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
+/* Spreadsheet Grid Layout */
 table {
   border-collapse: collapse;
   width: 100%;
+  table-layout: fixed; /* Equal width for all columns */
 }
 
 td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid #b4b4b4; /* Light gray borders for cells */
+  padding: 10px;
   text-align: center;
   width: 80px;
+  background-color: #f4f4f4; /* Light background for cells */
 }
 
 td input {
   width: 100%;
   border: none;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px; /* Slightly smaller text size */
+  font-family: 'Courier New', Courier, monospace; /* Retro font */
 }
 
 td input:focus {
-  outline: none;
+  outline: 2px solid #80c8ff; /* Light blue outline for focused cell */
 }
 
+/* Color Picker Section */
 .color-picker-container {
   margin-top: 10px;
+  padding: 10px;
+  background-color: #f0f0f0; /* Light gray background for the color picker */
+  border: 1px solid #ccc;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+#cell-color {
+  border: 1px solid #888;
+  padding: 3px;
+}
+
+#apply-color, #cancel-color {
+  padding: 8px 16px;
+  margin: 5px;
+  border: 1px solid #777;
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #d0d0d0;
+}
+
+#apply-color:hover, #cancel-color:hover {
+  background-color: #b8b8b8; /* Hover effect for buttons */
 }
 
