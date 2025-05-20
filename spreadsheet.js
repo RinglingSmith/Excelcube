@@ -46,6 +46,27 @@ function update(cellId) {
   cell.textContent = val.startsWith("=") ? evaluated : val;
 }
 
+document.getElementById("insert-table").addEventListener("click", () => {
+  const startCol = 1; // B (0-indexed: A=0, B=1)
+  const startRow = 2; // Row 2
+
+  const cols = 3;
+  const rows = 5;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cellId = `${String.fromCharCode(65 + startCol + c)}${startRow + r}`;
+      const cell = document.querySelector(`[data-cell="${cellId}"]`);
+      if (cell) {
+        cell.style.border = "2px solid #007bff";
+        cell.style.backgroundColor = r === 0 ? "#cce5ff" : "#f8f9fa"; // Header row
+        cell.textContent = r === 0 ? `Col ${c + 1}` : "";
+        sheet[cellId] = { raw: cell.textContent };
+      }
+    }
+  }
+});
+
 // Event listener
 document.querySelectorAll(".cell").forEach((cell) => {
   const id = cell.dataset.cell;
