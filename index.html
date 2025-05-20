@@ -1,56 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Excel App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Spreadsheet</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="spreadsheet-container">
+    <table id="spreadsheet">
+      <!-- Dynamic Rows and Columns will be generated here -->
+    </table>
+  </div>
 
-    <h1>Simple Excel App</h1>
-
-    <div class="excel-app">
-        <div class="excel-header">
-            <div>Column 1</div>
-            <div>Column 2</div>
-            <div>Column 3</div>
-            <div>Column 4</div>
-            <div>Column 5</div>
-            <div>Column 6</div>
-            <div>Column 7</div>
-            <div>Column 8</div>
-            <div>Column 9</div>
-            <div>Column 10</div>
-        </div>
-        <!-- Row 1 -->
-        <div class="excel-cell" data-row="1" data-col="1"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="2"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="3"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="4"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="5"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="6"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="7"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="8"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="9"><input type="text"></div>
-        <div class="excel-cell" data-row="1" data-col="10"><input type="text"></div>
-
-        <!-- Row 2 -->
-        <div class="excel-cell" data-row="2" data-col="1"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="2"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="3"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="4"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="5"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="6"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="7"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="8"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="9"><input type="text"></div>
-        <div class="excel-cell" data-row="2" data-col="10"><input type="text"></div>
-        
-        <!-- Add more rows as needed -->
-    </div>
-
-    <script src="spreadsheet.js">
-    </script>
-    
+  <script src="spreadsheet.js"></script>
 </body>
 </html>

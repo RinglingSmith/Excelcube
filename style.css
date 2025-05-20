@@ -1,46 +1,39 @@
-  body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
 
-        .excel-app {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-gap: 1px;
-            background-color: #ccc;
-        }
+.spreadsheet-container {
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: white;
+}
 
-        .excel-cell {
-            width: 60px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            text-align: center;
-            vertical-align: middle;
-            font-size: 14px;
-            cursor: pointer;
-        }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
 
-        .excel-cell input {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: transparent;
-            text-align: center;
-            font-size: 14px;
-        }
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  width: 80px;
+}
 
-        .excel-header {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            background-color: #ddd;
-        }
+td input {
+  width: 100%;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+}
 
-        .excel-header div {
-            text-align: center;
-            font-weight: bold;
-            padding: 5px;
-            background-color: #ddd;
-        }
+td input:focus {
+  outline: none;
+}
