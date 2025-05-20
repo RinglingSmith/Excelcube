@@ -1,5 +1,5 @@
-const ROWS = 20;
-const COLS = 10;
+const ROWS = 30;
+const COLS = 25;
 const sheet = {}; // Store cell raw values
 const container = document.getElementById("spreadsheet");
 
