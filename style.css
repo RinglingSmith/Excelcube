@@ -94,8 +94,7 @@ body {
 .cell {
   overflow: hidden;         /* Hide any text that doesn't fit */
   white-space: nowrap;      /* Prevent text from wrapping to the next line */
-  text-overflow: ellipsis;  /* Optional: Adds '...' when text overflows */
-  word-break: break-word;   /* Allows long words to break if needed */
+  word-break: break-all;    /* Allow long words to break to the next line */
   padding: 5px;
   border: 1px solid #ccc;
   text-align: center;

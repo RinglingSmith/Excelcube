@@ -128,6 +128,48 @@ function evaluate(cellId, visited = new Set()) {
   }
 }
 
+function updateVisibleTable() {
+  const { startCol, startRow } = currentTable;
+  const rows = container.querySelectorAll('.row');
+  const headerRow = container.querySelector('.header-row');
+
+  // Update column headers
+  for (let c = 0; c < COLS; c++) {
+    const colHeader = headerRow.children[c + 1];
+    colHeader.textContent = getColLabel(startCol + c);
+  }
+
+  // Update rows
+  for (let r = 0; r < ROWS; r++) {
+    const row = rows[r];
+    const rowHeader = row.children[0];
+    const rowIndex = startRow + r;
+    rowHeader.textContent = rowIndex;
+
+    for (let c = 0; c < COLS; c++) {
+      const cell = row.children[c + 1];
+      const colIndex = startCol + c;
+      const cellId = `${getColLabel(colIndex)}${rowIndex}`;
+      cell.dataset.cell = cellId;
+
+      const val = sheet[cellId]?.raw || '';
+      cell.textContent = val;
+
+      // Cell listeners
+      cell.onfocus = () => {
+        const raw = sheet[cellId]?.raw;
+        if (raw) cell.textContent = raw;
+      };
+
+      cell.onblur = () => {
+        const raw = cell.textContent.trim();
+        sheet[cellId] = { raw };
+        cell.textContent = raw.startsWith('=') ? evaluate(cellId) : raw;
+      };
+    }
+  }
+}
+
 // === Topbar Controls ===
 
 // Delete table content
