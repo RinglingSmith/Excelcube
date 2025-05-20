@@ -1,215 +1,39 @@
-/* Basic Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Body */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-}
-
-/* Spreadsheet container */
-#spreadsheet {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin: 20px auto;
-  width: 80%;
-  max-width: 1200px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Top bar */
-#topbar {
-  background-color: #4CAF50;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #fff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-#topbar button, #topbar input[type="color"] {
-  font-size: 14px;
-  padding: 6px 12px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  color: #333;
-  border-radius: 3px;
-}
-
-#topbar button:hover {
-  background-color: #45a049;
-  color: #fff;
-}
-
-#topbar button:active {
-  background-color: #398039;
-}
-
-/* Header row and column styling */
-.header-row {
-  display: flex;
-  background-color: #f1f1f1;
-  border-top: 1px solid #ddd;
-}
-
-.corner {
-  width: 50px;
-  height: 40px;
-  background-color: #f1f1f1;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-}
-
-.header {
-  flex: 1;
-  text-align: center;
-  background-color: #dcdcdc;
-  padding: 8px;
-  border-right: 1px solid #ddd;
-  font-weight: bold;
-  color: #333;
-  height: 40px;
-}
-
-.row {
-  display: flex;
-}
-
-.row .header {
-  width: 50px;
-  text-align: center;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-  font-weight: bold;
-  padding: 10px 0;
-}
-
-/* Cells */
-.cell {
-  width: 100px;
-  height: 40px;
-  padding: 8px;
-  text-align: center;
-  vertical-align: middle;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  color: #333;
-  font-size: 14px;
-  white-space: normal;     /* Allow text to wrap normally */
-  word-wrap: break-word;   /* Ensure words break when too long */
-  overflow: visible;       /* Ensure the content isn't hidden */
-}
-
-/* When the cell is focused */
-.cell:focus {
-  outline: none;
-  background-color: #fff7cc;
-  border: 2px solid #ffa500;
-}
-
-/* Hover effects */
-.cell:hover {
-  background-color: #f7f7f7;
-}
-
-.cell[data-cell]:hover {
-  background-color: #f7f7f7;
-}
-
-.cell[data-cell]:active {
-  background-color: #e5e5e5;
-}
-
-/* Selected cell */
-.cell.selected {
-  background-color: #d3e5ff;
-  border: 2px solid #007bff;
-}
-
-/* Empty cell placeholder */
-.cell[contenteditable="true"]:empty:before {
-  content: " ";
-  color: #bbb;
-}
-
-/* Grid Styling */
-#spreadsheet .row {
-  display: flex;
-}
-
-#spreadsheet .cell {
-  width: 100px;
-  height: 40px;
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 14px;
-  padding: 8px;
-}
-
-/* Button Styling */
-button {
-  font-size: 14px;
-  padding: 6px 12px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-button:active {
-  background-color: #398039;
-}
-
-/* Color picker for cells */
-#cell-color-picker {
-  padding: 6px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  width: 50px;
-  height: 30px;
-}
-
-/* Expand table button */
-#expand-table {
-  padding: 6px;
-  border-radius: 5px;
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
-  color: #333;
-}
-
-#expand-table:hover {
-  background-color: #ddd;
-}
-
-#expand-table:active {
-  background-color: #ccc;
-}
-
-/* Scrollable container for large grids */
-#spreadsheet {
-  overflow-x: auto;
-  overflow-y: hidden;
-}
+ table {
+            border-collapse: collapse;
+            margin: 20px;
+            cursor: pointer;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .selected {
+            background-color: #f2f2f2;
+        }
+        .context-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .context-menu li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .context-menu li:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            padding: 10px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
