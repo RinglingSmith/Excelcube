@@ -7,6 +7,17 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #f4f4f4;
+  flex-direction: column;
+}
+
+.controls {
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
 }
 
 .spreadsheet-container {
@@ -37,3 +48,8 @@ td input {
 td input:focus {
   outline: none;
 }
+
+.color-picker-container {
+  margin-top: 10px;
+}
+
