@@ -91,32 +91,17 @@ body {
 }
 
 /* Spreadsheet cells */
-
 .cell {
   overflow: hidden;         /* Hide any text that doesn't fit */
   white-space: nowrap;      /* Prevent text from wrapping to the next line */
-  text-overflow: ellipsis;  /* Optional: Shows '...' if text overflows */
-  word-break: break-word;   /* This ensures long words break and don't cause overflow */
+  text-overflow: ellipsis;  /* Optional: Adds '...' when text overflows */
+  word-break: break-word;   /* Allows long words to break if needed */
   padding: 5px;
   border: 1px solid #ccc;
   text-align: center;
   vertical-align: middle;
 }
 
-.cell {
-  width: 60px;
-  height: 30px;
-  border: 1px solid #444;
-  background-color: #fff;
-  text-align: center;
-  vertical-align: middle;
-  padding: 4px;
-  font-size: 13px;
-  font-family: "Courier New", Courier, monospace;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-  transition: background-color 0.1s ease;
-}
 
 .cell.selected {
   border: 2px solid #ff8c00;

@@ -40,12 +40,14 @@ function buildGrid() {
   corner.classList.add('corner');
   headerRow.appendChild(corner);
 
+  // Column Headers
   for (let c = 0; c < COLS; c++) {
     const colHeader = document.createElement('div');
     colHeader.classList.add('header');
     headerRow.appendChild(colHeader);
   }
 
+  // Row Headers and Cells
   for (let r = 0; r < ROWS; r++) {
     const rowDiv = document.createElement('div');
     rowDiv.classList.add('row');
@@ -127,6 +129,8 @@ function evaluate(cellId, visited = new Set()) {
 }
 
 // === Topbar Controls ===
+
+// Delete table content
 document.getElementById("delete-table")?.addEventListener("click", () => {
   const { startCol, startRow, cols, rows } = currentTable;
 
@@ -144,7 +148,7 @@ document.getElementById("delete-table")?.addEventListener("click", () => {
   updateVisibleTable();
 });
 
-
+// Format table with headers
 document.getElementById("format-table")?.addEventListener("click", () => {
   const { startCol, startRow, cols, rows } = currentTable;
 
@@ -162,12 +166,14 @@ document.getElementById("format-table")?.addEventListener("click", () => {
   updateVisibleTable();
 });
 
+// Expand table size
 document.getElementById("expand-table")?.addEventListener("click", () => {
   currentTable.cols += 1;
   currentTable.rows += 1;
   updateVisibleTable();
 });
 
+// Apply color to selected cell
 document.getElementById("apply-color")?.addEventListener("click", () => {
   const color = document.getElementById("cell-color-picker").value;
   if (selectedCell) {
@@ -182,7 +188,6 @@ container.addEventListener("click", (e) => {
     selectedCell = cell;
   }
 });
-
 
 // === Right-click drag to move table window ===
 
