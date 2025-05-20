@@ -1,13 +1,11 @@
-const rows = 30;
-const cols = 24;
+let rows = 10;
+let cols = 10;
 let selectedCell = null;
 
-// Function to create a new grid/table
+// Create the initial grid
 function createGrid() {
   const table = document.getElementById("spreadsheet");
-
-  // Clear existing table
-  table.innerHTML = '';
+  table.innerHTML = ''; // Clear existing table
 
   // Create the table rows and cells dynamically
   for (let i = 0; i < rows; i++) {
@@ -22,7 +20,7 @@ function createGrid() {
       input.dataset.row = i;
       input.dataset.col = j;
 
-      // Add click event for selecting a cell
+      // Add click event to select the cell
       input.addEventListener("click", () => selectCell(input));
 
       cell.appendChild(input);
@@ -32,23 +30,22 @@ function createGrid() {
   }
 }
 
-// Select a cell and display the color picker
+// Function to select a cell
 function selectCell(cell) {
   selectedCell = cell;
   document.querySelector(".color-picker-container").style.display = "block";
 }
 
-// Add new table
+// Add table button - creates a new grid
 document.getElementById("add-table").addEventListener("click", () => {
   createGrid();
 });
 
-// Add new row to the table
+// Add row button - adds a new row at the bottom
 document.getElementById("add-row").addEventListener("click", () => {
   const table = document.getElementById("spreadsheet");
   const newRow = document.createElement("tr");
 
-  // Create new cells for the new row
   for (let i = 0; i < cols; i++) {
     const newCell = document.createElement("td");
     const input = document.createElement("input");
@@ -61,14 +58,14 @@ document.getElementById("add-row").addEventListener("click", () => {
   }
 
   table.appendChild(newRow);
+  rows++;
 });
 
-// Add new column to the table
+// Add column button - adds a new column to all rows
 document.getElementById("add-column").addEventListener("click", () => {
   const table = document.getElementById("spreadsheet");
   const rowsList = table.getElementsByTagName("tr");
 
-  // Add new cell in each row
   for (let i = 0; i < rowsList.length; i++) {
     const newCell = document.createElement("td");
     const input = document.createElement("input");
@@ -83,7 +80,7 @@ document.getElementById("add-column").addEventListener("click", () => {
   cols++;
 });
 
-// Change the background color of a cell
+// Apply color to selected cell
 document.getElementById("apply-color").addEventListener("click", () => {
   if (selectedCell) {
     const color = document.getElementById("cell-color").value;
@@ -97,6 +94,5 @@ document.getElementById("cancel-color").addEventListener("click", () => {
   document.querySelector(".color-picker-container").style.display = "none";
 });
 
-// Initial grid
+// Initialize the grid on load
 createGrid();
-

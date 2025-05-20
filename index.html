@@ -6,17 +6,25 @@
   <title>Simple Spreadsheet</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+<body>
   <div class="controls">
     <button id="add-table">Add Table</button>
     <button id="add-row">Add Row</button>
     <button id="add-column">Add Column</button>
     <button id="color-picker">Change Cell Color</button>
   </div>
-<body>
+
   <div class="spreadsheet-container">
     <table id="spreadsheet">
       <!-- Dynamic Rows and Columns will be generated here -->
     </table>
+  </div>
+
+  <div class="color-picker-container" style="display: none;">
+    <label for="cell-color">Pick Cell Color:</label>
+    <input type="color" id="cell-color" />
+    <button id="apply-color">Apply Color</button>
+    <button id="cancel-color">Cancel</button>
   </div>
 
   <script src="spreadsheet.js"></script>
