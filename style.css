@@ -94,17 +94,19 @@ body {
 .cell {
   overflow: hidden;         /* Hide any text that doesn't fit */
   white-space: nowrap;      /* Prevent text from wrapping to the next line */
-  word-break: break-all;    /* Allow long words to break to the next line */
+  word-wrap: break-word;    /* Ensure long words break within the cell */
   padding: 5px;
   border: 1px solid #ccc;
   text-align: center;
   vertical-align: middle;
+  height: 30px;             /* Fix the height of the cell */
+  width: 60px;              /* Set a fixed width for the cell */
 }
 
-
+/* Selected cell */
 .cell.selected {
-  border: 2px solid #ff8c00;
-  background-color: #fdf5e6;
+  background-color: #add8e6;
+  border: 2px solid #4682b4;
 }
 
 .cell:focus {
@@ -127,12 +129,6 @@ body {
 
 .cell[contenteditable="true"]:empty {
   color: #888;
-}
-
-/* Selected cell */
-.cell.selected {
-  background-color: #add8e6;
-  border: 2px solid #4682b4;
 }
 
 /* Utility buttons styling */
