@@ -11,7 +11,6 @@ let currentTable = {
   rows: 6,
 };
 
-// Convert column number to Excel-style label (A, B, ..., Z, AA, AB, ...)
 function getColLabel(n) {
   let label = '';
   while (n >= 0) {
@@ -21,8 +20,17 @@ function getColLabel(n) {
   return label;
 }
 
+function colLabelToIndex(label) {
+  let index = 0;
+  for (let i = 0; i < label.length; i++) {
+    index *= 26;
+    index += label.charCodeAt(i) - 65 + 1;
+  }
+  return index - 1;
+}
+
 // Create headers and cells
-container.innerHTML = '<div class="header"></div>'; // Top-left corner
+container.innerHTML = '<div class="header"></div>';
 for (let c = 0; c < COLS; c++) {
   container.innerHTML += `<div class="header">${getColLabel(c)}</div>`;
 }
@@ -34,7 +42,6 @@ for (let r = 1; r <= ROWS; r++) {
   }
 }
 
-// Formula evaluation (basic)
 function evaluate(cellId, visited = new Set()) {
   const raw = sheet[cellId]?.raw || "";
   if (!raw.startsWith("=")) return raw;
@@ -55,7 +62,6 @@ function evaluate(cellId, visited = new Set()) {
   }
 }
 
-// Handle selected cell
 document.querySelectorAll(".cell").forEach(cell => {
   cell.addEventListener("click", () => {
     selectedCell = cell;
@@ -69,7 +75,6 @@ document.getElementById("apply-color").addEventListener("click", () => {
   }
 });
 
-// Update cell and dependents
 function update(cellId) {
   const cell = document.querySelector(`[data-cell="${cellId}"]`);
   const val = sheet[cellId]?.raw || "";
@@ -77,7 +82,6 @@ function update(cellId) {
   cell.textContent = val.startsWith("=") ? evaluated : val;
 }
 
-// Format a block as table
 function formatTable() {
   const { startCol, startRow, cols, rows } = currentTable;
   for (let r = 0; r < rows; r++) {
@@ -105,13 +109,94 @@ document.getElementById("format-table").addEventListener("click", () => {
   formatTable();
 });
 
-document.getElementById("move-table").addEventListener("click", () => {
-  const offsetRows = 3;
-  const offsetCols = 2;
+document.getElementById("expand-table").addEventListener("click", () => {
+  currentTable.cols += 1;
+  currentTable.rows += 1;
+  formatTable();
+});
 
+document.querySelectorAll(".cell").forEach((cell) => {
+  const id = cell.dataset.cell;
+
+  cell.addEventListener("focus", () => {
+    const raw = sheet[id]?.raw;
+    if (raw) cell.textContent = raw;
+  });
+
+  cell.addEventListener("blur", () => {
+    const raw = cell.textContent.trim();
+    sheet[id] = { raw };
+    update(id);
+
+    for (let r = 1; r <= ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        update(`${getColLabel(c)}${r}`);
+      }
+    }
+  });
+});
+
+// === Drag-to-Move Table ===
+
+let isDraggingTable = false;
+let dragStartX = 0;
+let dragStartY = 0;
+
+container.addEventListener("mousedown", (e) => {
+  const cell = e.target.closest(".cell");
+  if (!cell) return;
+
+  const cellId = cell.dataset.cell;
+  if (!cellId) return;
+
+  const colLabel = cellId.match(/[A-Z]+/)[0];
+  const rowNumber = parseInt(cellId.match(/[0-9]+/)[0]);
+
+  const colIndex = colLabelToIndex(colLabel);
+  const rowIndex = rowNumber;
+
+  const { startCol, startRow, cols, rows } = currentTable;
+
+  if (
+    colIndex >= startCol &&
+    colIndex < startCol + cols &&
+    rowIndex >= startRow &&
+    rowIndex < startRow + rows
+  ) {
+    isDraggingTable = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+  }
+});
+
+container.addEventListener("mousemove", (e) => {
+  if (!isDraggingTable) return;
+
+  const dx = e.clientX - dragStartX;
+  const dy = e.clientY - dragStartY;
+
+  if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
+    const offsetCols = Math.round(dx / 60);
+    const offsetRows = Math.round(dy / 25);
+
+    if (offsetCols !== 0 || offsetRows !== 0) {
+      moveTableBy(offsetCols, offsetRows);
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+    }
+  }
+});
+
+container.addEventListener("mouseup", () => {
+  isDraggingTable = false;
+});
+
+function moveTableBy(offsetCols, offsetRows) {
   const { startCol, startRow, cols, rows } = currentTable;
   const newStartCol = startCol + offsetCols;
   const newStartRow = startRow + offsetRows;
+
+  if (newStartCol < 0 || newStartRow < 1) return;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -119,6 +204,7 @@ document.getElementById("move-table").addEventListener("click", () => {
       const newId = `${getColLabel(newStartCol + c)}${newStartRow + r}`;
       const oldCell = document.querySelector(`[data-cell="${oldId}"]`);
       const newCell = document.querySelector(`[data-cell="${newId}"]`);
+
       if (oldCell && newCell) {
         newCell.textContent = oldCell.textContent;
         newCell.style.backgroundColor = oldCell.style.backgroundColor;
@@ -141,32 +227,4 @@ document.getElementById("move-table").addEventListener("click", () => {
 
   currentTable.startCol = newStartCol;
   currentTable.startRow = newStartRow;
-});
-
-document.getElementById("expand-table").addEventListener("click", () => {
-  currentTable.cols += 1;
-  currentTable.rows += 1;
-  formatTable();
-});
-
-// Handle input
-document.querySelectorAll(".cell").forEach((cell) => {
-  const id = cell.dataset.cell;
-
-  cell.addEventListener("focus", () => {
-    const raw = sheet[id]?.raw;
-    if (raw) cell.textContent = raw;
-  });
-
-  cell.addEventListener("blur", () => {
-    const raw = cell.textContent.trim();
-    sheet[id] = { raw };
-    update(id);
-
-    for (let r = 1; r <= ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        update(`${getColLabel(c)}${r}`);
-      }
-    }
-  });
-});
+}
