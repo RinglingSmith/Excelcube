@@ -13,6 +13,7 @@
     <button id="add-column">Add Column</button>
     <button id="color-picker">Change Cell Color</button>
     <button id="export-to-excel">Export to Excel</button>
+    <button id="export-png">Export as PNG</button>
   </div>
 
   <div class="spreadsheet-container">
@@ -28,9 +29,24 @@
     <button id="cancel-color">Cancel</button>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
 
   <script src="spreadsheet.js"></script>
+  
+<script>
+  document.getElementById("export-png").addEventListener("click", function () {
+    const table = document.querySelector(".spreadsheet-container");
+
+    html2canvas(table).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "spreadsheet.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  });
+</script>
 
   <script>
   // Function to export table data to Excel
