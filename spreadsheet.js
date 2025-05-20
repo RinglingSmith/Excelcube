@@ -2,85 +2,111 @@ let rows = 7;
 let cols = 5;
 let selectedCell = null;
 
-// Create the initial grid
+function getColumnLetter(index) {
+  let letter = '';
+  while (index >= 0) {
+    letter = String.fromCharCode((index % 26) + 65) + letter;
+    index = Math.floor(index / 26) - 1;
+  }
+  return letter;
+}
+
 function createGrid() {
   const table = document.getElementById("spreadsheet");
-  table.innerHTML = ''; // Clear existing table
+  table.innerHTML = '';
 
-  // Create the table rows and cells dynamically
+  // Create header row
+  const headerRow = document.createElement("tr");
+  const cornerCell = document.createElement("th"); // Top-left empty corner
+  headerRow.appendChild(cornerCell);
+
+  for (let j = 0; j < cols; j++) {
+    const th = document.createElement("th");
+    th.textContent = getColumnLetter(j);
+    headerRow.appendChild(th);
+  }
+  table.appendChild(headerRow);
+
+  // Create the rest of the grid
   for (let i = 0; i < rows; i++) {
     const row = document.createElement("tr");
+
+    const rowHeader = document.createElement("th");
+    rowHeader.textContent = i + 1;
+    row.appendChild(rowHeader);
 
     for (let j = 0; j < cols; j++) {
       const cell = document.createElement("td");
 
-      // Create an input field for each cell
       const input = document.createElement("input");
       input.type = "text";
       input.dataset.row = i;
       input.dataset.col = j;
 
-      // Add click event to select the cell
       input.addEventListener("click", () => selectCell(input));
 
       cell.appendChild(input);
       row.appendChild(cell);
     }
+
     table.appendChild(row);
   }
 }
 
-// Function to select a cell
 function selectCell(cell) {
   selectedCell = cell;
   document.querySelector(".color-picker-container").style.display = "block";
 }
 
-// Add table button - creates a new grid
-document.getElementById("add-table").addEventListener("click", () => {
-  createGrid();
-});
+document.getElementById("add-table").addEventListener("click", createGrid);
 
-// Add row button - adds a new row at the bottom
 document.getElementById("add-row").addEventListener("click", () => {
   const table = document.getElementById("spreadsheet");
-  const newRow = document.createElement("tr");
 
-  for (let i = 0; i < cols; i++) {
-    const newCell = document.createElement("td");
+  const row = document.createElement("tr");
+  const rowHeader = document.createElement("th");
+  rowHeader.textContent = rows + 1;
+  row.appendChild(rowHeader);
+
+  for (let j = 0; j < cols; j++) {
+    const cell = document.createElement("td");
     const input = document.createElement("input");
     input.type = "text";
     input.dataset.row = rows;
-    input.dataset.col = i;
+    input.dataset.col = j;
     input.addEventListener("click", () => selectCell(input));
-    newCell.appendChild(input);
-    newRow.appendChild(newCell);
+    cell.appendChild(input);
+    row.appendChild(cell);
   }
 
-  table.appendChild(newRow);
+  table.appendChild(row);
   rows++;
 });
 
-// Add column button - adds a new column to all rows
 document.getElementById("add-column").addEventListener("click", () => {
   const table = document.getElementById("spreadsheet");
-  const rowsList = table.getElementsByTagName("tr");
+  const allRows = table.getElementsByTagName("tr");
 
-  for (let i = 0; i < rowsList.length; i++) {
-    const newCell = document.createElement("td");
+  // Add header cell
+  const headerCell = document.createElement("th");
+  headerCell.textContent = getColumnLetter(cols);
+  allRows[0].appendChild(headerCell);
+
+  // Add input cells
+  for (let i = 1; i < allRows.length; i++) {
+    const cell = document.createElement("td");
     const input = document.createElement("input");
     input.type = "text";
-    input.dataset.row = i;
+    input.dataset.row = i - 1;
     input.dataset.col = cols;
     input.addEventListener("click", () => selectCell(input));
-    newCell.appendChild(input);
-    rowsList[i].appendChild(newCell);
+    cell.appendChild(input);
+    allRows[i].appendChild(cell);
   }
 
   cols++;
 });
 
-// Apply color to selected cell
 document.getElementById("apply-color").addEventListener("click", () => {
   if (selectedCell) {
     const color = document.getElementById("cell-color").value;
@@ -89,10 +115,9 @@ document.getElementById("apply-color").addEventListener("click", () => {
   document.querySelector(".color-picker-container").style.display = "none";
 });
 
-// Cancel color picker
 document.getElementById("cancel-color").addEventListener("click", () => {
   document.querySelector(".color-picker-container").style.display = "none";
 });
 
-// Initialize the grid on load
+// Initialize grid on load
 createGrid();
