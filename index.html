@@ -3,32 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel</title>
+    <title>Simple Excel App</title>
 </head>
 <body>
 
-<button class="btn" onclick="addRow()">Add Row</button>
-<button class="btn" onclick="addColumn()">Add Column</button>
+    <h1>Simple Excel App</h1>
 
-<table id="excelTable">
-    <tr>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
-    </tr>
-    <tr>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
-    </tr>
-</table>
+    <div class="excel-app">
+        <div class="excel-header">
+            <div>Column 1</div>
+            <div>Column 2</div>
+            <div>Column 3</div>
+            <div>Column 4</div>
+            <div>Column 5</div>
+            <div>Column 6</div>
+            <div>Column 7</div>
+            <div>Column 8</div>
+            <div>Column 9</div>
+            <div>Column 10</div>
+        </div>
+        <!-- Row 1 -->
+        <div class="excel-cell" data-row="1" data-col="1"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="2"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="3"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="4"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="5"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="6"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="7"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="8"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="9"><input type="text"></div>
+        <div class="excel-cell" data-row="1" data-col="10"><input type="text"></div>
 
-<div class="context-menu" id="contextMenu">
-    <ul>
-        <li onclick="changeCellColor()">Change Cell Color</li>
-        <li onclick="deleteCell()">Delete Cell</li>
-    </ul>
-</div>
+        <!-- Row 2 -->
+        <div class="excel-cell" data-row="2" data-col="1"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="2"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="3"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="4"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="5"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="6"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="7"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="8"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="9"><input type="text"></div>
+        <div class="excel-cell" data-row="2" data-col="10"><input type="text"></div>
+        
+        <!-- Add more rows as needed -->
+    </div>
 
-<script src="spreadsheet.js"></script>
-
+    <script src="spreadsheet.js">
+    </script>
+    
 </body>
 </html>

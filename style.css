@@ -1,39 +1,46 @@
- table {
-            border-collapse: collapse;
-            margin: 20px;
-            cursor: pointer;
+  body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
-        th, td {
+
+        .excel-app {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-gap: 1px;
+            background-color: #ccc;
+        }
+
+        .excel-cell {
+            width: 60px;
+            height: 30px;
             border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        .selected {
-            background-color: #f2f2f2;
-        }
-        .context-menu {
-            display: none;
-            position: absolute;
             background-color: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-        .context-menu li {
-            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 14px;
             cursor: pointer;
         }
-        .context-menu li:hover {
-            background-color: #f1f1f1;
-        }
-        .btn {
-            padding: 10px;
-            margin: 10px;
-            background-color: #4CAF50;
-            color: white;
+
+        .excel-cell input {
+            width: 100%;
+            height: 100%;
             border: none;
-            cursor: pointer;
+            background-color: transparent;
+            text-align: center;
+            font-size: 14px;
         }
-        .btn:hover {
-            background-color: #45a049;
+
+        .excel-header {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            background-color: #ddd;
+        }
+
+        .excel-header div {
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+            background-color: #ddd;
         }
