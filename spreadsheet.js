@@ -29,16 +29,38 @@ function colLabelToIndex(label) {
   return index - 1;
 }
 
-// Create headers and cells
-container.innerHTML = '<div class="header"></div>';
+// Clear existing table and then create new one
+container.innerHTML = ''; 
+
+const headerRow = document.createElement('div');
+headerRow.classList.add('header-row');
+container.appendChild(headerRow);
+
 for (let c = 0; c < COLS; c++) {
-  container.innerHTML += `<div class="header">${getColLabel(c)}</div>`;
+  const colHeader = document.createElement('div');
+  colHeader.classList.add('header');
+  colHeader.textContent = getColLabel(c);
+  headerRow.appendChild(colHeader);
 }
+
+// Create rows and cells
 for (let r = 1; r <= ROWS; r++) {
-  container.innerHTML += `<div class="header">${r}</div>`;
+  const rowDiv = document.createElement('div');
+  rowDiv.classList.add('row');
+  container.appendChild(rowDiv);
+
+  const rowHeader = document.createElement('div');
+  rowHeader.classList.add('header');
+  rowHeader.textContent = r;
+  rowDiv.appendChild(rowHeader);
+
   for (let c = 0; c < COLS; c++) {
-    const id = `${getColLabel(c)}${r}`;
-    container.innerHTML += `<div class="cell" contenteditable="true" data-cell="${id}"></div>`;
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    cell.setAttribute('contenteditable', 'true');
+    const cellId = `${getColLabel(c)}${r}`;
+    cell.setAttribute('data-cell', cellId);
+    rowDiv.appendChild(cell);
   }
 }
 
