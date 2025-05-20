@@ -29,12 +29,17 @@ function colLabelToIndex(label) {
   return index - 1;
 }
 
-// Clear existing table and then create new one
-container.innerHTML = ''; 
+// Build table
+container.innerHTML = '';
 
 const headerRow = document.createElement('div');
 headerRow.classList.add('header-row');
 container.appendChild(headerRow);
+
+// Column headers
+const corner = document.createElement('div');
+corner.classList.add('corner');
+headerRow.appendChild(corner);
 
 for (let c = 0; c < COLS; c++) {
   const colHeader = document.createElement('div');
@@ -43,7 +48,7 @@ for (let c = 0; c < COLS; c++) {
   headerRow.appendChild(colHeader);
 }
 
-// Create rows and cells
+// Rows and cells
 for (let r = 1; r <= ROWS; r++) {
   const rowDiv = document.createElement('div');
   rowDiv.classList.add('row');
@@ -64,6 +69,7 @@ for (let r = 1; r <= ROWS; r++) {
   }
 }
 
+// Evaluate formula or return raw value
 function evaluate(cellId, visited = new Set()) {
   const raw = sheet[cellId]?.raw || "";
   if (!raw.startsWith("=")) return raw;
@@ -83,19 +89,6 @@ function evaluate(cellId, visited = new Set()) {
     return "#ERR";
   }
 }
-
-document.querySelectorAll(".cell").forEach(cell => {
-  cell.addEventListener("click", () => {
-    selectedCell = cell;
-  });
-});
-
-document.getElementById("apply-color").addEventListener("click", () => {
-  const color = document.getElementById("cell-color-picker").value;
-  if (selectedCell) {
-    selectedCell.style.backgroundColor = color;
-  }
-});
 
 function update(cellId) {
   const cell = document.querySelector(`[data-cell="${cellId}"]`);
@@ -126,6 +119,7 @@ function formatTable() {
   }
 }
 
+// Event listeners
 document.getElementById("format-table").addEventListener("click", () => {
   currentTable = { startCol: 1, startRow: 2, cols: 4, rows: 6 };
   formatTable();
@@ -137,8 +131,20 @@ document.getElementById("expand-table").addEventListener("click", () => {
   formatTable();
 });
 
+document.getElementById("apply-color").addEventListener("click", () => {
+  const color = document.getElementById("cell-color-picker").value;
+  if (selectedCell) {
+    selectedCell.style.backgroundColor = color;
+  }
+});
+
+// Cell interaction
 document.querySelectorAll(".cell").forEach((cell) => {
   const id = cell.dataset.cell;
+
+  cell.addEventListener("click", () => {
+    selectedCell = cell;
+  });
 
   cell.addEventListener("focus", () => {
     const raw = sheet[id]?.raw;
@@ -158,8 +164,7 @@ document.querySelectorAll(".cell").forEach((cell) => {
   });
 });
 
-// === Drag-to-Move Table ===
-
+// === Drag-to-Move ===
 let isDraggingTable = false;
 let dragStartX = 0;
 let dragStartY = 0;
@@ -197,14 +202,11 @@ container.addEventListener("mousemove", (e) => {
   const dx = e.clientX - dragStartX;
   const dy = e.clientY - dragStartY;
 
-  if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-    // Smoothly move the table based on mouse movement
-    const offsetCols = dx / 60;  // Instead of rounding, keep it proportional
-    const offsetRows = dy / 25;  // Adjust this value for smoother movement
+  if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
+    const offsetCols = Math.round(dx / 60);
+    const offsetRows = Math.round(dy / 25);
 
     moveTableBy(offsetCols, offsetRows);
-    
-    // Update the starting points for the next move
     dragStartX = e.clientX;
     dragStartY = e.clientY;
   }
@@ -216,36 +218,33 @@ container.addEventListener("mouseup", () => {
 
 function moveTableBy(offsetCols, offsetRows) {
   const { startCol, startRow, cols, rows } = currentTable;
-
   const newStartCol = startCol + offsetCols;
   const newStartRow = startRow + offsetRows;
 
-  // Prevent the table from going out of bounds
   if (newStartCol < 0 || newStartRow < 1) return;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const oldId = `${getColLabel(startCol + c)}${startRow + r}`;
-      const newId = `${getColLabel(Math.round(newStartCol + c))}${Math.round(newStartRow + r)}`;  // Round to nearest integer for display
+      const newId = `${getColLabel(newStartCol + c)}${newStartRow + r}`;
+
       const oldCell = document.querySelector(`[data-cell="${oldId}"]`);
       const newCell = document.querySelector(`[data-cell="${newId}"]`);
 
       if (oldCell && newCell) {
-        // Copy the content and styles
+        // Copy visual and logical state
         newCell.textContent = oldCell.textContent;
         newCell.style.backgroundColor = oldCell.style.backgroundColor;
         newCell.style.color = oldCell.style.color;
         newCell.style.fontWeight = oldCell.style.fontWeight;
         newCell.style.border = oldCell.style.border;
 
-        sheet[newId] = { raw: oldCell.textContent };
-        delete sheet[oldId];
+        sheet[newId] = { raw: sheet[oldId]?.raw || "" };
 
-        // Clear the old cell
+        // Clear old visually (do NOT delete sheet data)
         oldCell.textContent = "";
         oldCell.removeAttribute("style");
 
-        // If the selected cell was in the old position, reset it
         if (selectedCell && selectedCell.dataset.cell === oldId) {
           selectedCell = null;
         }
@@ -253,6 +252,6 @@ function moveTableBy(offsetCols, offsetRows) {
     }
   }
 
-  currentTable.startCol = Math.round(newStartCol);  // Round to nearest integer
-  currentTable.startRow = Math.round(newStartRow);  // Round to nearest integer
+  currentTable.startCol = newStartCol;
+  currentTable.startRow = newStartRow;
 }

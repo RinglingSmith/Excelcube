@@ -31,6 +31,68 @@
   border-right: none;
 }
 
+#topbar {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+    border-bottom: 2px solid #888;
+    box-shadow: inset 0 1px #fff;
+    gap: 6px;
+  }
+
+  #topbar button,
+  #topbar input[type="color"] {
+    padding: 4px 8px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    border: 2px solid #888;
+    background-color: #ddd;
+    color: #000;
+    cursor: pointer;
+  }
+
+  #topbar button:hover {
+    background-color: #bbb;
+  }
+
+  #spreadsheet {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .header-row, .row {
+    display: flex;
+  }
+
+  .header, .cell {
+    width: 60px;
+    height: 25px;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 25px;
+    background-color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+  }
+
+  .header {
+    background-color: #c0c0c0;
+    font-weight: bold;
+  }
+
+  .corner {
+    width: 60px;
+    height: 25px;
+    background-color: #c0c0c0;
+    border: 1px solid #999;
+  }
+
+  .cell[contenteditable="true"]:focus {
+    outline: 2px 
+  }
+
 /* Row styling */
 .row {
   display: flex;
