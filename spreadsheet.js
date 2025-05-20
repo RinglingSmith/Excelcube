@@ -1,5 +1,5 @@
-const ROWS = 20;
-const COLS = 10;
+const ROWS = 30;
+const COLS = 20;
 const sheet = {}; // Stores cell data
 const container = document.getElementById("spreadsheet");
 
@@ -203,55 +203,5 @@ container.addEventListener("mousemove", (e) => {
   const dy = e.clientY - dragStartY;
 
   if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
-    const offsetCols = Math.round(dx / 60);
-    const offsetRows = Math.round(dy / 25);
-
-    moveTableBy(offsetCols, offsetRows);
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
   }
 });
-
-container.addEventListener("mouseup", () => {
-  isDraggingTable = false;
-});
-
-function moveTableBy(offsetCols, offsetRows) {
-  const { startCol, startRow, cols, rows } = currentTable;
-  const newStartCol = startCol + offsetCols;
-  const newStartRow = startRow + offsetRows;
-
-  if (newStartCol < 0 || newStartRow < 1) return;
-
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const oldId = `${getColLabel(startCol + c)}${startRow + r}`;
-      const newId = `${getColLabel(newStartCol + c)}${newStartRow + r}`;
-
-      const oldCell = document.querySelector(`[data-cell="${oldId}"]`);
-      const newCell = document.querySelector(`[data-cell="${newId}"]`);
-
-      if (oldCell && newCell) {
-        // Copy visual and logical state
-        newCell.textContent = oldCell.textContent;
-        newCell.style.backgroundColor = oldCell.style.backgroundColor;
-        newCell.style.color = oldCell.style.color;
-        newCell.style.fontWeight = oldCell.style.fontWeight;
-        newCell.style.border = oldCell.style.border;
-
-        sheet[newId] = { raw: sheet[oldId]?.raw || "" };
-
-        // Clear old visually (do NOT delete sheet data)
-        oldCell.textContent = "";
-        oldCell.removeAttribute("style");
-
-        if (selectedCell && selectedCell.dataset.cell === oldId) {
-          selectedCell = null;
-        }
-      }
-    }
-  }
-
-  currentTable.startCol = newStartCol;
-  currentTable.startRow = newStartRow;
-}
