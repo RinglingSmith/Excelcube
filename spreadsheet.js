@@ -197,15 +197,16 @@ container.addEventListener("mousemove", (e) => {
   const dx = e.clientX - dragStartX;
   const dy = e.clientY - dragStartY;
 
-  if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
-    const offsetCols = Math.round(dx / 60);
-    const offsetRows = Math.round(dy / 25);
+  if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+    // Smoothly move the table based on mouse movement
+    const offsetCols = dx / 60;  // Instead of rounding, keep it proportional
+    const offsetRows = dy / 25;  // Adjust this value for smoother movement
 
-    if (offsetCols !== 0 || offsetRows !== 0) {
-      moveTableBy(offsetCols, offsetRows);
-      dragStartX = e.clientX;
-      dragStartY = e.clientY;
-    }
+    moveTableBy(offsetCols, offsetRows);
+    
+    // Update the starting points for the next move
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
   }
 });
 
@@ -215,19 +216,22 @@ container.addEventListener("mouseup", () => {
 
 function moveTableBy(offsetCols, offsetRows) {
   const { startCol, startRow, cols, rows } = currentTable;
+
   const newStartCol = startCol + offsetCols;
   const newStartRow = startRow + offsetRows;
 
+  // Prevent the table from going out of bounds
   if (newStartCol < 0 || newStartRow < 1) return;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const oldId = `${getColLabel(startCol + c)}${startRow + r}`;
-      const newId = `${getColLabel(newStartCol + c)}${newStartRow + r}`;
+      const newId = `${getColLabel(Math.round(newStartCol + c))}${Math.round(newStartRow + r)}`;  // Round to nearest integer for display
       const oldCell = document.querySelector(`[data-cell="${oldId}"]`);
       const newCell = document.querySelector(`[data-cell="${newId}"]`);
 
       if (oldCell && newCell) {
+        // Copy the content and styles
         newCell.textContent = oldCell.textContent;
         newCell.style.backgroundColor = oldCell.style.backgroundColor;
         newCell.style.color = oldCell.style.color;
@@ -237,9 +241,11 @@ function moveTableBy(offsetCols, offsetRows) {
         sheet[newId] = { raw: oldCell.textContent };
         delete sheet[oldId];
 
+        // Clear the old cell
         oldCell.textContent = "";
         oldCell.removeAttribute("style");
 
+        // If the selected cell was in the old position, reset it
         if (selectedCell && selectedCell.dataset.cell === oldId) {
           selectedCell = null;
         }
@@ -247,6 +253,6 @@ function moveTableBy(offsetCols, offsetRows) {
     }
   }
 
-  currentTable.startCol = newStartCol;
-  currentTable.startRow = newStartRow;
+  currentTable.startCol = Math.round(newStartCol);  // Round to nearest integer
+  currentTable.startRow = Math.round(newStartRow);  // Round to nearest integer
 }

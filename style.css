@@ -1,29 +1,139 @@
-body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-}
-
+/* General styles for the container */
 #spreadsheet {
-  display: grid;
-  grid-template-columns: repeat(11, 100px);
-  gap: 1px;
-  user-select: none;
+  font-family: "Courier New", Courier, monospace; /* Pixel-style font */
+  display: inline-block;
+  margin: 20px;
+  border: 3px solid #333; /* Dark border for vintage look */
+  background-color: #e0e0e0; /* Light gray background */
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
-.cell, .header {
-  border: 1px solid #ccc;
-  padding: 4px;
-  text-align: left;
-  min-height: 24px;
-  background: white;
-}
-
-.cell {
-  outline: none;
+/* Header row */
+.header-row {
+  display: flex;
+  background-color: #2f4f4f; /* Dark gray for header */
+  color: #ffffff;
+  font-weight: bold;
+  border-bottom: 2px solid #000;
 }
 
 .header {
-  background: #eee;
-  font-weight: bold;
+  width: 60px;
+  padding: 5px;
   text-align: center;
+  background-color: #2f4f4f;
+  border-right: 1px solid #444;
+  box-sizing: border-box;
 }
+
+.header:last-child {
+  border-right: none;
+}
+
+/* Row styling */
+.row {
+  display: flex;
+}
+
+.row .header {
+  background-color: #b0c4de; /* Light steel blue for row numbers */
+  color: black;
+  font-weight: normal;
+  width: 60px;
+  padding: 5px;
+  text-align: center;
+  border-right: 1px solid #444;
+}
+
+.cell {
+  width: 60px;
+  height: 30px;
+  display: inline-block;
+  border: 1px solid #444; /* Dark border for cells */
+  text-align: center;
+  vertical-align: middle;
+  background-color: #ffffff; /* White background for cells */
+  padding: 5px;
+  box-sizing: border-box;
+  overflow-wrap: break-word; /* Prevent text overflow */
+  font-size: 12px;
+  font-family: "Courier New", Courier, monospace;
+  transition: background-color 0.2s ease;
+}
+
+.cell:focus {
+  outline: none; /* Remove the default focus outline */
+  background-color: #ffff99; /* Light yellow for active cells */
+}
+
+.cell[contenteditable="true"]:empty:before {
+  content: " "; /* Placeholder for empty cells */
+}
+
+.cell[contenteditable="true"]:empty {
+  color: #888; /* Lighter color for empty cells */
+}
+
+.cell[data-cell]:hover {
+  background-color: #f0f8ff; /* Hover effect for cells */
+}
+
+.cell[data-cell]:active {
+  background-color: #b0c4de; /* Pressed effect for cells */
+}
+
+/* Styling for selected cell */
+.cell.selected {
+  background-color: #add8e6; /* Light blue for selected cell */
+  border: 2px solid #4682b4; /* Blue border for selected cell */
+}
+
+button {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  padding: 5px 10px;
+  margin: 5px;
+  background-color: #2f4f4f;
+  color: white;
+  border: 2px solid #333;
+  cursor: pointer;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button:hover {
+  background-color: #4682b4; /* Hover effect for buttons */
+}
+
+button:active {
+  background-color: #5f9ea0; /* Active button color */
+}
+
+/* Styles for the container buttons (e.g., apply color, format table) */
+#apply-color,
+#format-table,
+#expand-table {
+  margin-top: 10px;
+  display: inline-block;
+}
+
+/* Styling for the color picker */
+#cell-color-picker {
+  width: 80px;
+  height: 25px;
+  margin-left: 5px;
+}
+
+/* Adjust table size based on dynamic content */
+#spreadsheet {
+  margin-bottom: 20px;
+  overflow: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Dragging styles */
+.dragging {
+  cursor: move;
+}
+
+
