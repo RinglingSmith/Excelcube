@@ -1,14 +1,14 @@
-const ROWS = 30;
-const COLS = 20;
-const sheet = {}; // Stores cell data
+const ROWS = 20;
+const COLS = 10;
+const sheet = {}; // Store cell raw values
 const container = document.getElementById("spreadsheet");
 
 let selectedCell = null;
 let currentTable = {
-  startCol: 1,
-  startRow: 2,
-  cols: 4,
-  rows: 6,
+  startCol: 0,
+  startRow: 1,
+  cols: 5,
+  rows: 10,
 };
 
 function getColLabel(n) {
@@ -23,58 +23,94 @@ function getColLabel(n) {
 function colLabelToIndex(label) {
   let index = 0;
   for (let i = 0; i < label.length; i++) {
-    index *= 26;
-    index += label.charCodeAt(i) - 65 + 1;
+    index = index * 26 + (label.charCodeAt(i) - 64);
   }
   return index - 1;
 }
 
-// Build table
-container.innerHTML = '';
+// Create the static grid (cells are reused)
+function buildGrid() {
+  container.innerHTML = '';
 
-const headerRow = document.createElement('div');
-headerRow.classList.add('header-row');
-container.appendChild(headerRow);
+  const headerRow = document.createElement('div');
+  headerRow.classList.add('header-row');
+  container.appendChild(headerRow);
 
-// Column headers
-const corner = document.createElement('div');
-corner.classList.add('corner');
-headerRow.appendChild(corner);
-
-for (let c = 0; c < COLS; c++) {
-  const colHeader = document.createElement('div');
-  colHeader.classList.add('header');
-  colHeader.textContent = getColLabel(c);
-  headerRow.appendChild(colHeader);
-}
-
-// Rows and cells
-for (let r = 1; r <= ROWS; r++) {
-  const rowDiv = document.createElement('div');
-  rowDiv.classList.add('row');
-  container.appendChild(rowDiv);
-
-  const rowHeader = document.createElement('div');
-  rowHeader.classList.add('header');
-  rowHeader.textContent = r;
-  rowDiv.appendChild(rowHeader);
+  const corner = document.createElement('div');
+  corner.classList.add('corner');
+  headerRow.appendChild(corner);
 
   for (let c = 0; c < COLS; c++) {
-    const cell = document.createElement('div');
-    cell.classList.add('cell');
-    cell.setAttribute('contenteditable', 'true');
-    const cellId = `${getColLabel(c)}${r}`;
-    cell.setAttribute('data-cell', cellId);
-    rowDiv.appendChild(cell);
+    const colHeader = document.createElement('div');
+    colHeader.classList.add('header');
+    headerRow.appendChild(colHeader);
+  }
+
+  for (let r = 0; r < ROWS; r++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('row');
+    container.appendChild(rowDiv);
+
+    const rowHeader = document.createElement('div');
+    rowHeader.classList.add('header');
+    rowDiv.appendChild(rowHeader);
+
+    for (let c = 0; c < COLS; c++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.setAttribute('contenteditable', 'true');
+      rowDiv.appendChild(cell);
+    }
   }
 }
 
-// Evaluate formula or return raw value
-function evaluate(cellId, visited = new Set()) {
-  const raw = sheet[cellId]?.raw || "";
-  if (!raw.startsWith("=")) return raw;
+function updateVisibleTable() {
+  const { startCol, startRow } = currentTable;
+  const rows = container.querySelectorAll('.row');
+  const headerRow = container.querySelector('.header-row');
 
-  if (visited.has(cellId)) return "#CYCLE!";
+  // Update column headers
+  for (let c = 0; c < COLS; c++) {
+    const colHeader = headerRow.children[c + 1];
+    colHeader.textContent = getColLabel(startCol + c);
+  }
+
+  // Update rows
+  for (let r = 0; r < ROWS; r++) {
+    const row = rows[r];
+    const rowHeader = row.children[0];
+    const rowIndex = startRow + r;
+    rowHeader.textContent = rowIndex;
+
+    for (let c = 0; c < COLS; c++) {
+      const cell = row.children[c + 1];
+      const colIndex = startCol + c;
+      const cellId = `${getColLabel(colIndex)}${rowIndex}`;
+      cell.dataset.cell = cellId;
+
+      const val = sheet[cellId]?.raw || '';
+      cell.textContent = val;
+
+      // Cell listeners
+      cell.onfocus = () => {
+        const raw = sheet[cellId]?.raw;
+        if (raw) cell.textContent = raw;
+      };
+
+      cell.onblur = () => {
+        const raw = cell.textContent.trim();
+        sheet[cellId] = { raw };
+        cell.textContent = raw.startsWith('=') ? evaluate(cellId) : raw;
+      };
+    }
+  }
+}
+
+function evaluate(cellId, visited = new Set()) {
+  const raw = sheet[cellId]?.raw || '';
+  if (!raw.startsWith('=')) return raw;
+
+  if (visited.has(cellId)) return '#CYCLE!';
   visited.add(cellId);
 
   try {
@@ -86,122 +122,57 @@ function evaluate(cellId, visited = new Set()) {
       });
     return eval(expr);
   } catch {
-    return "#ERR";
+    return '#ERR';
   }
 }
 
-function update(cellId) {
-  const cell = document.querySelector(`[data-cell="${cellId}"]`);
-  const val = sheet[cellId]?.raw || "";
-  const evaluated = evaluate(cellId);
-  cell.textContent = val.startsWith("=") ? evaluated : val;
-}
+// === Right-click drag to move table window ===
 
-function formatTable() {
-  const { startCol, startRow, cols, rows } = currentTable;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const cellId = `${getColLabel(startCol + c)}${startRow + r}`;
-      const cell = document.querySelector(`[data-cell="${cellId}"]`);
-      if (cell) {
-        if (r === 0) {
-          cell.style.backgroundColor = "#007bff";
-          cell.style.color = "#fff";
-          cell.style.fontWeight = "bold";
-          cell.textContent = `Header ${c + 1}`;
-        } else {
-          cell.style.backgroundColor = "#f2f2f2";
-        }
-        cell.style.border = "2px solid #999";
-        sheet[cellId] = { raw: cell.textContent };
-      }
-    }
-  }
-}
+let isRightDragging = false;
+let lastX = 0;
+let lastY = 0;
 
-// Event listeners
-document.getElementById("format-table").addEventListener("click", () => {
-  currentTable = { startCol: 1, startRow: 2, cols: 4, rows: 6 };
-  formatTable();
-});
-
-document.getElementById("expand-table").addEventListener("click", () => {
-  currentTable.cols += 1;
-  currentTable.rows += 1;
-  formatTable();
-});
-
-document.getElementById("apply-color").addEventListener("click", () => {
-  const color = document.getElementById("cell-color-picker").value;
-  if (selectedCell) {
-    selectedCell.style.backgroundColor = color;
+container.addEventListener('mousedown', (e) => {
+  if (e.button === 2) { // Right click
+    isRightDragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    e.preventDefault();
   }
 });
 
-// Cell interaction
-document.querySelectorAll(".cell").forEach((cell) => {
-  const id = cell.dataset.cell;
+document.addEventListener('mousemove', (e) => {
+  if (!isRightDragging) return;
 
-  cell.addEventListener("click", () => {
-    selectedCell = cell;
-  });
+  const dx = e.clientX - lastX;
+  const dy = e.clientY - lastY;
 
-  cell.addEventListener("focus", () => {
-    const raw = sheet[id]?.raw;
-    if (raw) cell.textContent = raw;
-  });
+  if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+    const offsetCols = Math.sign(dx);
+    const offsetRows = Math.sign(dy);
 
-  cell.addEventListener("blur", () => {
-    const raw = cell.textContent.trim();
-    sheet[id] = { raw };
-    update(id);
+    const newStartCol = Math.max(0, currentTable.startCol - offsetCols);
+    const newStartRow = Math.max(1, currentTable.startRow - offsetRows);
 
-    for (let r = 1; r <= ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        update(`${getColLabel(c)}${r}`);
-      }
-    }
-  });
-});
+    currentTable.startCol = newStartCol;
+    currentTable.startRow = newStartRow;
 
-// === Drag-to-Move ===
-let isDraggingTable = false;
-let dragStartX = 0;
-let dragStartY = 0;
+    updateVisibleTable();
 
-container.addEventListener("mousedown", (e) => {
-  const cell = e.target.closest(".cell");
-  if (!cell) return;
-
-  const cellId = cell.dataset.cell;
-  if (!cellId) return;
-
-  const colLabel = cellId.match(/[A-Z]+/)[0];
-  const rowNumber = parseInt(cellId.match(/[0-9]+/)[0]);
-
-  const colIndex = colLabelToIndex(colLabel);
-  const rowIndex = rowNumber;
-
-  const { startCol, startRow, cols, rows } = currentTable;
-
-  if (
-    colIndex >= startCol &&
-    colIndex < startCol + cols &&
-    rowIndex >= startRow &&
-    rowIndex < startRow + rows
-  ) {
-    isDraggingTable = true;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
+    lastX = e.clientX;
+    lastY = e.clientY;
   }
 });
 
-container.addEventListener("mousemove", (e) => {
-  if (!isDraggingTable) return;
-
-  const dx = e.clientX - dragStartX;
-  const dy = e.clientY - dragStartY;
-
-  if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
-  }
+document.addEventListener('mouseup', () => {
+  isRightDragging = false;
 });
+
+// Disable context menu
+container.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
+
+// === Initialize ===
+buildGrid();
+updateVisibleTable();
