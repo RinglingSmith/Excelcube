@@ -1,201 +1,177 @@
-/* General styles for the container */
+/* Vintage Spreadsheet Styles */
+
+body {
+  background-color: #c0c0c0;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0;
+  padding: 0;
+}
+
+/* Spreadsheet container */
 #spreadsheet {
-  font-family: "Courier New", Courier, monospace; /* Pixel-style font */
-  display: inline-block;
-  margin: 20px;
-  border: 3px solid #333; /* Dark border for vintage look */
-  background-color: #e0e0e0; /* Light gray background */
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin: 20px auto;
+  border: 3px ridge #808080;
+  background-color: #e0e0e0;
   font-size: 14px;
   letter-spacing: 0.5px;
+  width: fit-content;
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #404040;
 }
 
-/* Header row */
-.header-row {
+/* Top bar styling */
+#topbar {
   display: flex;
-  background-color: #2f4f4f; /* Dark gray for header */
-  color: #ffffff;
-  font-weight: bold;
-  border-bottom: 2px solid #000;
+  align-items: center;
+  padding: 5px 10px;
+  background: linear-gradient(to bottom, #dfdfdf, #b0b0b0);
+  border-bottom: 2px ridge #999;
+  box-shadow: inset 0 1px #fff;
+  gap: 8px;
 }
 
-.header {
+/* Buttons and inputs */
+#topbar button,
+#topbar input[type="color"] {
+  padding: 4px 8px;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  border: 2px outset #fff;
+  background-color: #dcdcdc;
+  color: #000;
+  cursor: pointer;
+}
+
+#topbar button:hover {
+  background-color: #bbb;
+}
+
+#topbar button:active {
+  border: 2px inset #808080;
+}
+
+/* Grid rows and headers */
+.header-row, .row {
+  display: flex;
+}
+
+.corner {
   width: 60px;
-  padding: 5px;
-  text-align: center;
-  background-color: #2f4f4f;
-  border-right: 1px solid #444;
+  height: 25px;
+  background-color: #c0c0c0;
+  border: 2px ridge #999;
   box-sizing: border-box;
 }
 
-.header:last-child {
-  border-right: none;
-}
-
-#topbar {
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
-    background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
-    border-bottom: 2px solid #888;
-    box-shadow: inset 0 1px #fff;
-    gap: 6px;
-  }
-
-  #topbar button,
-  #topbar input[type="color"] {
-    padding: 4px 8px;
-    font-size: 13px;
-    font-family: 'Courier New', monospace;
-    border: 2px solid #888;
-    background-color: #ddd;
-    color: #000;
-    cursor: pointer;
-  }
-
-  #topbar button:hover {
-    background-color: #bbb;
-  }
-
-  #spreadsheet {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  .header-row, .row {
-    display: flex;
-  }
-
-  .header, .cell {
-    width: 60px;
-    height: 25px;
-    border: 1px solid #999;
-    text-align: center;
-    line-height: 25px;
-    background-color: #fff;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-  }
-
-  .header {
-    background-color: #c0c0c0;
-    font-weight: bold;
-  }
-
-  .corner {
-    width: 60px;
-    height: 25px;
-    background-color: #c0c0c0;
-    border: 1px solid #999;
-  }
-
-  .cell[contenteditable="true"]:focus {
-    outline: 2px 
-  }
-
-/* Row styling */
-.row {
-  display: flex;
-}
-
-.row .header {
-  background-color: #b0c4de; /* Light steel blue for row numbers */
-  color: black;
-  font-weight: normal;
+/* Column headers */
+.header-row .header {
+  background-color: #2f4f4f;
+  color: white;
+  font-weight: bold;
+  border-right: 1px solid #555;
   width: 60px;
-  padding: 5px;
+  height: 25px;
   text-align: center;
-  border-right: 1px solid #444;
+  line-height: 25px;
+  box-sizing: border-box;
 }
 
+/* Row headers */
+.row .header {
+  background-color: #b0c4de;
+  color: black;
+  width: 60px;
+  height: 30px;
+  text-align: center;
+  border-right: 1px solid #555;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+/* Spreadsheet cells */
 .cell {
   width: 60px;
   height: 30px;
-  display: inline-block;
-  border: 1px solid #444; /* Dark border for cells */
+  border: 1px solid #444;
+  background-color: #fff;
   text-align: center;
   vertical-align: middle;
-  background-color: #ffffff; /* White background for cells */
-  padding: 5px;
-  box-sizing: border-box;
-  overflow-wrap: break-word; /* Prevent text overflow */
-  font-size: 12px;
+  padding: 4px;
+  font-size: 13px;
   font-family: "Courier New", Courier, monospace;
-  transition: background-color 0.2s ease;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  transition: background-color 0.1s ease;
 }
 
 .cell:focus {
-  outline: none; /* Remove the default focus outline */
-  background-color: #ffff99; /* Light yellow for active cells */
-}
-
-.cell[contenteditable="true"]:empty:before {
-  content: " "; /* Placeholder for empty cells */
-}
-
-.cell[contenteditable="true"]:empty {
-  color: #888; /* Lighter color for empty cells */
+  background-color: #ffff99;
+  outline: none;
+  border: 2px inset #999;
 }
 
 .cell[data-cell]:hover {
-  background-color: #f0f8ff; /* Hover effect for cells */
+  background-color: #f5faff;
 }
 
 .cell[data-cell]:active {
-  background-color: #b0c4de; /* Pressed effect for cells */
+  background-color: #b0c4de;
 }
 
-/* Styling for selected cell */
+.cell[contenteditable="true"]:empty:before {
+  content: " ";
+}
+
+.cell[contenteditable="true"]:empty {
+  color: #888;
+}
+
+/* Selected cell */
 .cell.selected {
-  background-color: #add8e6; /* Light blue for selected cell */
-  border: 2px solid #4682b4; /* Blue border for selected cell */
+  background-color: #add8e6;
+  border: 2px solid #4682b4;
 }
 
+/* Utility buttons styling */
 button {
   font-family: "Courier New", Courier, monospace;
-  font-size: 14px;
+  font-size: 13px;
   padding: 5px 10px;
-  margin: 5px;
-  background-color: #2f4f4f;
-  color: white;
-  border: 2px solid #333;
+  background-color: #c0c0c0;
+  color: #000;
+  border: 2px outset #fff;
   cursor: pointer;
-  border-radius: 4px;
-  box-sizing: border-box;
+  margin: 5px;
 }
 
 button:hover {
-  background-color: #4682b4; /* Hover effect for buttons */
+  background-color: #ddd;
 }
 
 button:active {
-  background-color: #5f9ea0; /* Active button color */
+  border: 2px inset #666;
+  background-color: #bbb;
 }
 
-/* Styles for the container buttons (e.g., apply color, format table) */
 #apply-color,
 #format-table,
 #expand-table {
-  margin-top: 10px;
   display: inline-block;
+  margin-top: 10px;
 }
 
-/* Styling for the color picker */
+/* Color picker styling */
 #cell-color-picker {
   width: 80px;
   height: 25px;
   margin-left: 5px;
+  border: 2px inset #999;
+  background-color: #ddd;
 }
 
-/* Adjust table size based on dynamic content */
-#spreadsheet {
-  margin-bottom: 20px;
-  overflow: hidden; /* Prevent horizontal scrolling */
-}
-
-/* Dragging styles */
+/* Dragging feedback */
 .dragging {
   cursor: move;
 }
-
-
