@@ -108,10 +108,9 @@ body {
   background-color: #fff;
   color: #333;
   font-size: 14px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  cursor: text;
+  white-space: normal;     /* Allow text to wrap normally */
+  word-wrap: break-word;   /* Ensure words break when too long */
+  overflow: visible;       /* Ensure the content isn't hidden */
 }
 
 /* When the cell is focused */
@@ -214,4 +213,3 @@ button:active {
   overflow-x: auto;
   overflow-y: hidden;
 }
-
