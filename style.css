@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+#spreadsheet {
+  display: grid;
+  grid-template-columns: repeat(11, 100px);
+  gap: 1px;
+  user-select: none;
+}
+
+.cell, .header {
+  border: 1px solid #ccc;
+  padding: 4px;
+  text-align: left;
+  min-height: 24px;
+  background: white;
+}
+
+.cell {
+  outline: none;
+}
+
+.header {
+  background: #eee;
+  font-weight: bold;
+  text-align: center;
+}
