@@ -214,6 +214,24 @@ container.addEventListener('contextmenu', (e) => {
   e.preventDefault();
 });
 
+document.getElementById("delete-table")?.addEventListener("click", () => {
+  const { startCol, startRow, cols, rows } = currentTable;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const rowIndex = startRow + r;
+      const colIndex = startCol + c;
+      const cellId = `${getColLabel(colIndex)}${rowIndex}`;
+
+      // Remove value from sheet
+      delete sheet[cellId];
+    }
+  }
+
+  updateVisibleTable();
+});
+
+
 // === Initialize ===
 buildGrid();
 updateVisibleTable();
