@@ -126,6 +126,47 @@ function evaluate(cellId, visited = new Set()) {
   }
 }
 
+// === Topbar Controls ===
+
+document.getElementById("format-table")?.addEventListener("click", () => {
+  const { startCol, startRow, cols, rows } = currentTable;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const rowIndex = startRow + r;
+      const colIndex = startCol + c;
+      const cellId = `${getColLabel(colIndex)}${rowIndex}`;
+      sheet[cellId] = {
+        raw: r === 0 ? `Header ${c + 1}` : "",
+      };
+    }
+  }
+
+  updateVisibleTable();
+});
+
+document.getElementById("expand-table")?.addEventListener("click", () => {
+  currentTable.cols += 1;
+  currentTable.rows += 1;
+  updateVisibleTable();
+});
+
+document.getElementById("apply-color")?.addEventListener("click", () => {
+  const color = document.getElementById("cell-color-picker").value;
+  if (selectedCell) {
+    selectedCell.style.backgroundColor = color;
+  }
+});
+
+// Track selected cell for color application
+container.addEventListener("click", (e) => {
+  const cell = e.target.closest(".cell");
+  if (cell && cell.dataset.cell) {
+    selectedCell = cell;
+  }
+});
+
+
 // === Right-click drag to move table window ===
 
 let isRightDragging = false;
